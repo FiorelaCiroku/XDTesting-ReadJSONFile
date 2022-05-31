@@ -1,9 +1,9 @@
 # This is an action that is able to read a JSON file that contains the input to construct a test case.
-# Input: JSON file
+# Input: JSON file path (.xd-testing/UserInput.json)
 # Output: A list of environmental variables with new values. 
 
 # The name of the action
-name: Create directory structure for XDTesting
+name: Read JSON file
 
 # Description of the action
 description: This action is able to read a JSON file from the XDTesting app.
@@ -16,18 +16,18 @@ branding:
 runs:
   using: "composite"
   env:
-    query: SELECT ?info ?name WHERE { ?person rdfs:seeAlso ?info . ?person foaf:homepage ?name .}
+    path: '.xd-testing/UserInput.json'
         
   # Steps that will be executed as part of the job
   steps:
-    - name: Run SPARQL validator
+    - name: Run JSON reader code
       run: |
-          function SPARQL_Reader () {
+          function JSON_Reader () {
             reader_result="$( PYTHON_ARG="$1" python3 - <<END
           import json
  
           # Opening JSON file
-          f = open('XDInput.json')
+          f = open(path)
  
           # returns JSON object as a dictionary
           data = json.load(f)
